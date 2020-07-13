@@ -8,7 +8,7 @@ import Data.Morphisms
 
 public export
 data Curried : ( g : Type -> Type ) -> ( h : Type -> Type ) -> ( a : Type ) -> Type where
-  MkCurried : ({r : Type} -> g (a -> r) -> h r) -> Curried g h a
+  MkCurried : (forall r. g (a -> r) -> h r) -> Curried g h a
 
 public export
 Functor g => Functor (Curried g h) where
@@ -24,5 +24,5 @@ liftCurried : Applicative f => f a -> Curried f f a
 liftCurried fa = MkCurried (<*> fa)
 
 public export
-lowerCurried : Applicative f => {a : Type} -> Curried f g a -> g a
+lowerCurried : Applicative f => Curried f g a -> g a
 lowerCurried (MkCurried f) = f (pure id)

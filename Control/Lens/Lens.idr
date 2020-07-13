@@ -60,12 +60,12 @@ fusing t = \(Mor f) => Mor ( lowerYoneda . ( applyMor . t . Mor ) ( liftYoneda .
 -- 'confusing' :: 'Traversal' s t a b -> 'Traversal' s t a b
 -- @
 public export
-confusing : { f : Type -> Type } -> Applicative f => LensLike (Curried (Yoneda f) (Yoneda f)) s t a b -> LensLike f s t a b
+confusing : {0 f : Type -> Type } -> Applicative f => LensLike (Curried (Yoneda f) (Yoneda f)) s t a b -> LensLike f s t a b
 confusing t = \(Mor f) => Mor (lowerYoneda . lowerCurried . ( applyMor . t . Mor ) (liftCurriedYoneda . f))
   where
 
-    yap : Yoneda f (a -> b) -> f a -> Yoneda f b
+    yap : forall a, b. Yoneda f (a -> b) -> f a -> Yoneda f b
     yap (MkYoneda k) fa = MkYoneda (\ab_r => k (ab_r .) <*> fa)
 
-    liftCurriedYoneda : Applicative f => f a -> Curried (Yoneda f) (Yoneda f) a
+    liftCurriedYoneda : forall a. Applicative f => f a -> Curried (Yoneda f) (Yoneda f) a
     liftCurriedYoneda fa = MkCurried (flip yap fa)
