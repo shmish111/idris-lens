@@ -5,8 +5,8 @@ import Data.Curried
 import Data.Yoneda
 import Data.Morphisms
 
-%access public export
 
+public export
 lens : (s -> a) -> (s -> b -> t) -> {f : Type -> Type}
     -> Functor f => Morphism a (f b) -> Morphism s (f t)
 lens sa sbt (Mor afb) = Mor (\s => sbt s <$> afb (sa s))
@@ -30,6 +30,7 @@ lens sa sbt (Mor afb) = Mor (\s => sbt s <$> afb (sa s))
 -- @
 -- 'fusing' :: 'Lens' s t a b -> 'Lens' s t a b
 -- @
+public export
 fusing : { f : Type -> Type } -> Functor f => LensLike (Yoneda f) s t a b -> LensLike f s t a b
 fusing t = \(Mor f) => Mor ( lowerYoneda . ( applyMor . t . Mor ) ( liftYoneda . f ) )
 
@@ -58,11 +59,12 @@ fusing t = \(Mor f) => Mor ( lowerYoneda . ( applyMor . t . Mor ) ( liftYoneda .
 -- @
 -- 'confusing' :: 'Traversal' s t a b -> 'Traversal' s t a b
 -- @
+public export
 confusing : { f : Type -> Type } -> Applicative f => LensLike (Curried (Yoneda f) (Yoneda f)) s t a b -> LensLike f s t a b
 confusing t = \(Mor f) => Mor (lowerYoneda . lowerCurried . ( applyMor . t . Mor ) (liftCurriedYoneda . f))
   where
 
-    yap : Applicative f => Yoneda f (a -> b) -> f a -> Yoneda f b
+    yap : Yoneda f (a -> b) -> f a -> Yoneda f b
     yap (MkYoneda k) fa = MkYoneda (\ab_r => k (ab_r .) <*> fa)
 
     liftCurriedYoneda : Applicative f => f a -> Curried (Yoneda f) (Yoneda f) a

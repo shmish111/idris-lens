@@ -16,13 +16,13 @@ Ex1Proof : Ex1 = Just 3
 Ex1Proof = Refl
 
 Ex2 : (Int, Int)
-Ex2 = (2,3) & over both (+1)
+Ex2 = (2,3) |> over both (+1)
 
 Ex2Proof : Ex2 = (3, 4)
 Ex2Proof = Refl
 
 Ex3 : (String, String)
-Ex3 = ("Hello",2) & _2 .~ "World!"
+Ex3 = ("Hello",2) |> _2 .~ "World!"
 
 Ex3Proof : Ex3 = ("Hello","World!")
 Ex3Proof = Refl
@@ -111,9 +111,9 @@ sansExample : Maybe Int
 sansExample = sans () (Just 4)
 
 fusingExample : Maybe (Int, Int)
-fusingExample = Just (2,3) & over ( fusing (_Just . both)) (+1)
+fusingExample = Just (2,3) |> over ( fusing (_Just . both)) (+1)
 
 confusingExample : Maybe (Int, Int)
-confusingExample = Just (2,3) & over ( confusing (_Just . both)) (+1)
+confusingExample = Just (2,3) |> over ( confusing (_Just . both)) (+1)
 
 -- --------------------------------------------------------------------- [ EOF ]

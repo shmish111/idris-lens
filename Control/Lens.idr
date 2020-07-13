@@ -26,6 +26,4 @@ import public Data.Profunctor
 import public Data.Tagged
 import public Data.Yoneda
 
-%access public export
-
 -- --------------------------------------------------------------------- [ EOF ]

@@ -4,8 +4,7 @@
 -- --------------------------------------------------------------------- [ EOH ]
 module Data.Contravariant
 
-%access public export
-
+public export
 interface Contravariant (f : Type -> Type) where
   contramap : (b -> a) -> f a -> f b
 

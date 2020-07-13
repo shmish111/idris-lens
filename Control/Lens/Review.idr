@@ -7,12 +7,13 @@ import Data.Profunctor
 import Data.Tagged
 
 %default total
-%access public export
 
 infixr 8 #
 
+public export
 (#) : AReview t b -> b -> t
 (#) p = runIdentity . untag . p . MkTagged . Id
 
+public export
 re : AReview t b -> Getter b t
 re p = to (p #)

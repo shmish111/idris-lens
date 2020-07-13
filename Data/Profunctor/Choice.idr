@@ -3,8 +3,7 @@ module Data.Profunctor.Choice
 import Data.Profunctor.Class
 import Data.Morphisms
 
-%access public export
-
+public export
 interface Profunctor p => Choice (p : Type -> Type -> Type) where
   left' : p a b -> p (Either a c) (Either b c)
   left' = dimap (either Right Left) (either Right Left) . right'
@@ -12,11 +11,14 @@ interface Profunctor p => Choice (p : Type -> Type -> Type) where
   right' : p a b -> p (Either c a) (Either c b)
   right' = dimap (either Right Left) (either Right Left) . left'
 
+public export
 Choice Morphism where
   left' (Mor f) = Mor g
-    where g (Left a) = Left (f a)
+    where g : Either a c -> Either b c
+          g (Left a) = Left (f a)
           g (Right c) = Right c
 
   right' (Mor f) = Mor g
-    where g (Left c) = Left c
+    where g : Either c a -> Either c b
+          g (Left c) = Left c
           g (Right a) = Right (f a)

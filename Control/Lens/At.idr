@@ -8,33 +8,37 @@ import Control.Lens.Setter
 import Control.Lens.Types
 import Control.Monad.Identity
 import Data.Profunctor
-import Prelude.List
+import Data.List
 
 %default total
-%access public export
 
+public export
 interface Ixed ( m : Type ) where
   IxInd : Type
   IxVal : Type
   ix : IxInd -> { f : Type -> Type } -> Applicative f => LensLike' f m IxVal
 
-implementation Ixed (List a) where
+public export
+implementation {a : Type} -> Ixed (List a) where
   IxInd = Nat
   IxVal = a
-  ix k (Mor f) = Mor (\xs0 => go xs0 k)
+  ix k (Mor h) = Mor (\xs0 => go xs0 k)
     where
+      go : List a -> Nat -> f (List a)
       go Nil _           = pure Nil
-      go (a :: as) Z     = (:: as) <$> (f a)
+      go (a :: as) Z     = (:: as) <$> (h a)
       go (a :: as) (S n) = (a ::)  <$> (go as n)
 
-implementation Ixed (Maybe a) where
+public export
+implementation {a : Type} -> Ixed (Maybe a) where
   IxInd = Unit
   IxVal = a
   ix _ (Mor f) = Mor (\g => case g of
-    (Just a) => Just <$> f a
-    Nothing  => pure Nothing
-  )
+                  (Just a) => Just <$> f a
+                  Nothing  => pure Nothing
+                  )
 
+public export
 interface At m where
   AtInd : Type
   AtVal : Type
@@ -49,10 +53,12 @@ interface At m where
   -- you cannot satisfy the 'Lens' laws.
   at : AtInd -> { f : Type -> Type } -> Applicative f => LensLike' f m (Maybe AtVal)
 
+public export
 sans : At m => AtInd { m } -> m -> m
-sans k m = m & at k .~ Nothing
+sans k m = m |> at k .~ Nothing
 
-implementation At (Maybe a) where
+public export
+implementation {a : Type} -> At (Maybe a) where
   AtInd = Unit
   AtVal = a
   at () (Mor f) = (Mor f)

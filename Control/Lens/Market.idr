@@ -3,19 +3,22 @@ module Control.Lens.Market
 import Data.Profunctor
 
 %default total
-%access public export
 
 
 ||| This type is used internally by the 'Control.Lens.Prism' code to
 ||| provide efficient access to the two parts of a 'Prism'.
+public export
 data Market a b s t = MkMarket (b -> t) (s -> Either t a)
 
+public export
 Market' : Type -> Type -> Type -> Type
 Market' a = Market a a
 
+public export
 Functor (Market a b s) where
   map f (MkMarket bt seta) = MkMarket (f . bt) (either (Left . f) Right . seta)
 
+public export
 Profunctor (Market a b) where
   dimap f g (MkMarket bt seta) = MkMarket (g . bt) (either (Left . g) Right . seta . f)
 
@@ -24,6 +27,7 @@ Profunctor (Market a b) where
   rmap f (MkMarket bt seta) = MkMarket (f . bt) (either (Left . f) Right . seta)
 
 
+public export
 Choice (Market a b) where
   left' (MkMarket bt seta) = MkMarket (Left . bt) $ \sc => case sc of
     Left s => case seta s of
