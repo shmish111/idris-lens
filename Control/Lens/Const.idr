@@ -7,7 +7,7 @@ import Data.Contravariant
 
 ||| Const Functor.
 public export
-data Const : (a : Type) -> (b : Type) -> Type where
+data Const : (0 a : Type) -> (b : Type) -> Type where
   MkConst: a -> Const a b
 
 public export

@@ -5,7 +5,7 @@
 module Data.Contravariant
 
 public export
-interface Contravariant (f : Type -> Type) where
+interface Contravariant (0 f : Type -> Type) where
   contramap : (b -> a) -> f a -> f b
 
 -- --------------------------------------------------------------------- [ EOF ]

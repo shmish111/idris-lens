@@ -4,7 +4,7 @@ import Data.Profunctor.Class
 import Data.Morphisms
 
 public export
-interface Profunctor p => Choice (p : Type -> Type -> Type) where
+interface Profunctor p => Choice (0 p : Type -> Type -> Type) where
   left' : p a b -> p (Either a c) (Either b c)
   left' = dimap (either Right Left) (either Right Left) . right'
 

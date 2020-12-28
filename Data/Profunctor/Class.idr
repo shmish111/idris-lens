@@ -3,7 +3,7 @@ module Data.Profunctor.Class
 import Data.Morphisms
 
 public export
-interface Profunctor (p : Type -> Type -> Type) where
+interface Profunctor (0 p : Type -> Type -> Type) where
   dimap : (a -> b) -> (c -> d) -> p b c -> p a d
   dimap f g = lmap f . rmap g
 
